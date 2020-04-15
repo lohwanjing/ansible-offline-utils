@@ -1,0 +1,4 @@
+---
+    ssl_server_name: ansible.ssl.test.com
+
+...
