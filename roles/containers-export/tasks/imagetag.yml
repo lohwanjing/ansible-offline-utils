@@ -1,0 +1,6 @@
+---
+- name: debug parsing
+  debug: 
+    msg: "{{image_tag}}}"
+
+

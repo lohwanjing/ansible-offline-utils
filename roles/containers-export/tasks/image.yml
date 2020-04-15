@@ -1,0 +1,14 @@
+---
+- name: debug parsing
+  debug: 
+    msg: "outer = {{outer_item}}"
+  when: outer_item.RepoTags is not none
+  register: validTag
+
+- include_tasks: imagetag.yml
+  loop: "{{outer_item.RepoTags | default([])}}"
+  loop_control:
+    loop_var: imagetag
+  when: validTag
+
+   

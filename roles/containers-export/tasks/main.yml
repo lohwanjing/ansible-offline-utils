@@ -1,0 +1,38 @@
+---
+- name: ensure file store is a directory
+  file: 
+    path: "{{container_store}}"
+    state: directory
+
+- name: ensure skopeo is installed
+  package:
+    name: skopeo
+    state: present
+
+- name: get info on docker host and list images
+  docker_host_info:
+    images: yes
+      dangling: false
+  register: result
+
+- name: test output
+  debug: 
+    var: result.images
+
+- name: test output
+  debug: 
+    var: result.images[0].RepoTags
+
+- name: test output
+  debug: 
+    var: {{item}}
+  with_list:
+  - result.images
+
+- include_tasks: image.yml
+  loop: "{{result.images| flatten(level=1)}}"
+  loop_control:
+    loop_var: outer_item
+  when: outer_item.RepoTags is not none
+
+   
