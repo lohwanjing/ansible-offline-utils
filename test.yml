@@ -1,0 +1,5 @@
+---
+  - hosts: internet
+    roles:
+     - ssl-cert
+...

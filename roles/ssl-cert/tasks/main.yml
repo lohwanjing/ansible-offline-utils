@@ -6,24 +6,24 @@
 
 - name: Ensure directory exists for local self-signed TLS certs.
   file:
-    path: /etc/selfsign/live/{{ ssl_server_name }}
+    path: /home/centos/ssl/{{ssl_server_name}}
     state: directory
 
 - name: Generate an OpenSSL private key.
   openssl_privatekey:
-    path: /etc/selfsign/live/{{ ssl_server_name }}/privkey.pem
+    path: /home/centos/ssl/{{ssl_server_name}}/privkey.pem
 
 - name: Generate an OpenSSL CSR.
   openssl_csr:
-    path: /etc/ssl/private/{{ ssl_server_name }}.csr
-    privatekey_path: /etc/selfsign/live/{{ ssl_server_name }}/privkey.pem
+    path: /home/centos/{{ssl_server_name}}.csr
+    privatekey_path: /home/centos/ssl/{{ ssl_server_name }}/privkey.pem
     common_name: "{{ ssl_server_name }}"
 
 - name: Generate a Self Signed OpenSSL certificate.
   openssl_certificate:
-    path: /etc/selfsign/live/{{ ssl_server_name }}/fullchain.pem
-    privatekey_path: /etc/selfsign/live/{{ ssl_server_name }}/privkey.pem
-    csr_path: /etc/ssl/private/{{ ssl_server_name }}.csr
+    path: /home/centos/ssl/{{ ssl_server_name }}/fullchain.pem
+    privatekey_path: /home/centos/ssl/{{ ssl_server_name }}/privkey.pem
+    csr_path: /home/centos/{{ ssl_server_name }}.csr
     provider: selfsigned
 
    
