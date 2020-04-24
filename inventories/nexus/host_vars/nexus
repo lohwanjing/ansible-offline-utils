@@ -1,0 +1,6 @@
+---
+    ssl_server_name: docker.ssl.test
+    nginx_server_name: "{{ssl_server_name}}"
+    ssl_cert_location: /home/centos/ssl/{{ ssl_server_name }}/fullchain.pem
+    ssl_key_location: /home/centos/ssl/{{ssl_server_name}}/privkey.pem 
+...
