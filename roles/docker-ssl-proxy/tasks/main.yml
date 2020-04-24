@@ -1,0 +1,6 @@
+---
+- name: copy conf file
+  template:
+    name: nginx
+    state: present
+...

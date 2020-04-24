@@ -1,0 +1,9 @@
+---
+  nginx_listen_port: 5000
+  nginx_server_name: docker.common.dev
+  nginx_body_size: 2G
+  nginx_ssl_cert_location: /etc/nginx/ssl/cert/docker-reverse-proxy.cert
+  nginx_ssl_key_location: /etc/nginx/ssl/key/dpcler-reverse-proxy.pem
+  nginx_proxy_location: http://localhost:9091
+  nginx_conf_location: /etc/nginx/nginx.conf
+...
