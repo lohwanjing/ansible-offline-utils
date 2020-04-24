@@ -1,6 +1,20 @@
 ---
-- name: install nginx
-  package:
-    name: nginx
-    state: present
+  - block:
+    - name: install nginx
+      package:
+        name: nginx
+        state: present
+        - name: enable service
+      systemd: 
+        name: nginx
+        enabled: yes
+        daemon_reload: yes
+    - name: start service
+      systemd: 
+        name: nginx
+        state: started
+        daemon_reload: yes
+    become: yes
+    become_user: root
+...
    

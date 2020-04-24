@@ -1,6 +1,40 @@
 ---
-- name: copy conf file
-  template:
-    name: nginx
-    state: present
+  - block:  
+    - name: copy conf file
+      template:
+        src: "{{role_path}}/templates/conf.j2"
+        destination: "{{nginx_conf_location}}"
+
+    - name: copy ssl certs
+      copy:
+        src: "{{ssl_cert_location}}"
+        destination: "{{nginx_ssl_cert_location}}"
+        remote_src: yes
+
+    - name: copy ssl keys
+      copy:
+        src: "{{ssl_key_location}}"
+        destination: "{{nginx_ssl_key_location}}"
+        remote_src: yes
+    - name: restart service
+      systemd: 
+        name: nginx
+        state: restarted
+        daemon_reload: yes
+
+    - name: open firewallports
+      firewalld:
+        port: "{{nginx_listen_port}}/tcp"
+        permanent: yes
+        immediate: yes
+        state: enabled
+    - name: restart service
+      systemd: 
+        name: firewalld
+        state: restarted
+        daemon_reload: yes
+  become: yes
+  become_user: root
+
+
 ...

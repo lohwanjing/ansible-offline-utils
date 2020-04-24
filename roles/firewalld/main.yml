@@ -1,29 +1,32 @@
 ---
-- name: Install firewalld
-  package:
-    name: firewalld
-    state: installed
-- name: enable service
-  systemd: 
-    name: firewalld
-    enabled: yes
-    daemon_reload: yes
-- name: start service
-  systemd: 
-    name: firewalld
-    enabled: yes
-    daemon_reload: yes
-- name: Install pythonpackage to manage firewall
-  package:
-    name: python-firewall
-    state: installed
-  when: ansible_distribution == 'CentOS'
-- name: Install pythonpackage to manage firewall
-  package:
-    name: python3-firewall
-    state: installed
-  when: ansible_distribution == 'Fedora'
--
+  - block:
+    - name: Install firewalld
+      package:
+        name: firewalld
+        state: installed
+    - name: enable service
+      systemd: 
+        name: firewalld
+        enabled: yes
+        daemon_reload: yes
+    - name: start service
+      systemd: 
+        name: firewalld
+        state: started
+        daemon_reload: yes
+    - name: Install pythonpackage to manage firewall
+      package:
+        name: python-firewall
+        state: installed
+      when: ansible_distribution == 'CentOS'
+    - name: Install pythonpackage to manage firewall
+      package:
+        name: python3-firewall
+        state: installed
+      when: ansible_distribution == 'Fedora'
+    become: yes
+    become_user: root
+...
 
     
    
