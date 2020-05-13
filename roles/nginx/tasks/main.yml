@@ -4,7 +4,7 @@
       package:
         name: nginx
         state: present
-        - name: enable service
+    - name: enable service
       systemd: 
         name: nginx
         enabled: yes

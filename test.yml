@@ -1,5 +1,5 @@
 ---
   - hosts: internet
     roles:
-     - ssl-cert
+     - docker-ssl-proxy
 ...
