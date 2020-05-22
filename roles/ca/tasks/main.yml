@@ -1,0 +1,64 @@
+---
+ - block:
+   - name: install epel
+     package:
+       name: epel-release
+       state: installed
+
+   - name: ensure cryptography installed
+     package:
+       name: python2-cryptography.x86_64
+       state: installed
+
+   - name: Ensure directory exists
+     file:
+       path: /home/centos/ca
+       state: directory
+
+   - name: Ensure directory exists to store ca key
+     file:
+       path: /home/centos/ca/root
+       state: directory
+
+   - name: Generate an OpenSSL private key for ca
+     openssl_privatekey:
+       path: /home/centos/ca/root/privkey.pem
+
+   - name: Generate an OpenSSL CSR.
+     openssl_csr:
+       path: /home/centos/ca/root/ca.csr
+       privatekey_path: /home/centos/ca/root/privkey.pem
+       common_name: "testca.test"
+
+   - name: Generate a Self Signed Root CA OpenSSL certificate.
+     openssl_certificate:
+       path: /home/centos/ca/root/ca.crt
+       privatekey_path: /home/centos/ca/root/privkey.pem
+       csr_path: /home/centos/ca/root/ca.csr
+       provider: selfsigned
+
+   - name: Ensure directory exists for local self-signed TLS certs.
+     file:
+       path: /home/centos/ssl/{{ssl_server_name}}
+       state: directory
+
+   - name: Generate an OpenSSL private key.
+     openssl_privatekey:
+       path: /home/centos/ssl/{{ssl_server_name}}/privkey.pem
+
+   - name: Generate an OpenSSL CSR.
+     openssl_csr:
+       path: /home/centos/{{ssl_server_name}}.csr
+       privatekey_path: /home/centos/ssl/{{ ssl_server_name }}/privkey.pem
+       common_name: "{{ ssl_server_name }}"
+
+   - name: Generate a cert signed by root CA.
+     openssl_certificate:
+       path: /home/centos/ssl/{{ ssl_server_name }}/fullchain.crt
+       csr_path: /home/centos/{{ ssl_server_name }}.csr
+       ownca_path: /home/centos/ca/root/ca.crt
+       ownca_privatekey_path: /home/centos/ca/root/privkey.pem
+       provider: ownca
+   become: yes
+   become_user: root
+   
